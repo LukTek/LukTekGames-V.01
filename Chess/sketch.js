@@ -8,8 +8,11 @@ let mg = true
 let rb = false
 let po = true
 let computer = false
+let wpoints = 0
+let bpoints = 0
+let points = 0
 
-
+let taken = 0
 let wait = false
 let counter = 0
 
@@ -1272,6 +1275,54 @@ if(white_turn){
 } else{
   text("Black's Move", width/2, 60)
 }
+
+fill(40)
+
+if(mouseX>10 && mouseX<160 && mouseY>10 && mouseY<90){
+  textSize(35)
+  rect(0, 0, 180, 100, 40)
+
+  fill(235, 235, 211)
+
+  text('Quit', 80, 60)
+
+} else{
+textSize(30)
+
+rect(10, 10, 150, 80, 40)
+
+fill(235, 235, 211)
+
+text('Quit', 80, 60)
+
+}
+
+if(po){
+
+fill(40)
+
+rect(550, 10, 240, 80, 40)
+
+fill(255)
+
+rect(560, 20, 60, 60, 40)
+
+fill(0)
+
+rect(665, 20, 60, 60, 40)
+
+fill(235, 235, 211)
+
+
+
+textSize(30)
+
+text(wpoints, 640, 62)
+
+text(bpoints, 745, 62)
+
+}
+
 }
 
 
@@ -1345,6 +1396,45 @@ function mouseClicked(){
 
   if(!wait){
 
+  if(mouseX>10 && mouseX<160 && mouseY>10 && mouseY<90){
+    data = Array(8).fill().map(()=>Array(8).fill(0))
+    for (q = 1; q<9; q++){
+      change_point(q, 2, 'p')
+      change_point(q, 7, 'P')
+    }
+
+    change_point(1, 1, 'r')
+    change_point(8, 1, 'r')
+    change_point(1, 8, 'R')
+    change_point(8, 8, 'R')
+
+    change_point(2, 1, 'h')
+    change_point(7, 1, 'h')
+    change_point(2, 8, 'H')
+    change_point(7, 8, 'H')
+
+    change_point(3, 1, 'b')
+    change_point(6, 1, 'b')
+    change_point(3, 8, 'B')
+    change_point(6, 8, 'B')
+
+    change_point(4, 1, 'q')
+    change_point(5, 1, 'k')
+    change_point(4, 8, 'Q')
+    change_point(5, 8, 'K')
+
+    wpoints = 0
+    bpoints = 0
+
+    white_turn = true
+
+
+
+
+    menu = true
+  }
+
+
 
 
 
@@ -1386,7 +1476,7 @@ function mouseClicked(){
 
 
 
-
+        taken = data[highlight[0]][highlight[1]]
 
         data[prev_square[0]][prev_square[1]] = 0
         data[highlight[0]][highlight[1]] = prev_piece
@@ -1440,6 +1530,38 @@ function mouseClicked(){
 
 
         } else{
+
+
+          console.log(taken, 'taken')
+
+
+
+
+          if (taken === 'P'){
+            points=1
+          } else if (taken === 'R'){
+            points=5
+          } else if (taken === 'H'){
+            points=3
+          } else if (taken === 'B'){
+            points=3
+          } else if (taken === 'Q'){
+            points=9
+          } else if (taken === 'K'){
+            points=10000
+          }
+
+
+
+          if(white_turn){
+            wpoints+=points
+          } else{
+            bpoints+=points
+          }
+
+
+
+
           wait = true
 
 
