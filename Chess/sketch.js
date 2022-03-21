@@ -144,10 +144,12 @@ change_point(3, 8, 'B')
 change_point(6, 8, 'B')
 
 change_point(4, 1, 'q')
-change_point(5, 1, 'k')
+change_point(5, 4, 'k')
 change_point(4, 8, 'Q')
 change_point(5, 8, 'K')
 
+
+change_point(6, 3, 'p')
 
 
 let comb = []
@@ -695,6 +697,24 @@ function ava_moves (x, y){
 
       }
 
+      if(y > 0){
+        if(data[x-1][y-1] === 0){
+          legal_moves.push([x, 8-y])
+        } else if (data[x-1][y-1] === data[x-1][y-1].toUpperCase()){
+            legal_moves.push([x, 8-y])
+        }
+
+      }
+
+      if(y > 0){
+        if(data[x+1][y-1] === 0){
+          legal_moves.push([x+2, 8-y])
+        } else if (data[x+1][y-1] === data[x+1][y-1].toUpperCase()){
+            legal_moves.push([x+2, 8-y])
+        }
+
+      }
+
 
       if(y < 7){
         if(data[x][y+1] === 0){
@@ -704,6 +724,28 @@ function ava_moves (x, y){
         }
 
       }
+
+      if(y < 7){
+        if(data[x+1][y+1] === 0){
+          legal_moves.push([x+2, 6-y])
+        } else if (data[x+1][y+1] === data[x+1][y+1].toUpperCase()){
+            legal_moves.push([x+2, 6-y])
+        }
+
+      }
+
+      if(y < 7){
+        if(data[x-1][y+1] === 0){
+          legal_moves.push([x, 6-y])
+        } else if (data[x-1][y+1] === data[x-1][y+1].toUpperCase()){
+            legal_moves.push([x, 6-y])
+        }
+
+      }
+
+
+
+
 
       if(x > 0){
         if(data[x-1][y] === 0){
@@ -722,6 +764,10 @@ function ava_moves (x, y){
         }
 
       }
+
+
+
+
 
 
 
