@@ -144,12 +144,12 @@ change_point(3, 8, 'B')
 change_point(6, 8, 'B')
 
 change_point(4, 1, 'q')
-change_point(5, 4, 'k')
+change_point(5, 1, 'k')
 change_point(4, 8, 'Q')
 change_point(5, 8, 'K')
 
 
-change_point(6, 3, 'p')
+
 
 
 let comb = []
