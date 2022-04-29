@@ -43,7 +43,7 @@ let count = 0
   
 for(let i = 0; i<7; i++){
   for(let q = 0; q<i+1; q++){
-    tab[i].push(new card(initial[count], 'tab', 290+i*187, 663+q*30, true, i, q))
+    tab[i].push(new card(initial[count], 'tab', 290+i*187, 663+q*30, q==i, i, q))
 
     count++
   }
@@ -59,7 +59,9 @@ for(let i = 28; i<52; i++){
   
   last = 0
   
-  current = stock.length-1
+  currentIndex = stock.length-1
+  
+  current = [new card(stock[currentIndex], 'current', 480, 360, true)]
 
   
 
@@ -173,9 +175,11 @@ if(moveAr.length>0){
   first = tab[heldCard[0]][heldCard[1]].ID%13+1
   
   sec = tab[moveAr[0][1]][tab[moveAr[0][1]].length-1].ID%13+1
+    
+  console.log(tab[heldCard[0]][heldCard[1]].ID, tab[moveAr[0][1]][tab[moveAr[0][1]].length-1].ID)
 
   
-  if(first!=sec-1){
+  if(first!=sec-1||tab[heldCard[0]][heldCard[1]].ID>26&&tab[moveAr[0][1]][tab[moveAr[0][1]].length-1].ID>26||tab[heldCard[0]][heldCard[1]].ID<=26&&tab[moveAr[0][1]][tab[moveAr[0][1]].length-1].ID<=26){
         for(let k = 0; k<7; k++){
       for(let l = 0; l<tab[k].length; l++){    
 
@@ -291,7 +295,10 @@ if(foundMove.length==1){
 
 
     tab[foundMove[0][0]].pop()
+    
+    if(tab[foundMove[0][0]].length>0){
     tab[foundMove[0][0]][tab[foundMove[0][0]].length-1].visible = true
+    }
 
   
 }
@@ -333,12 +340,16 @@ for(let i = 0; i<4; i++){
     
     if(foundation[i].length-1 == q){
       move = foundation[i][q].update()
-      if(move>=0&&foundation[i][q].location.y+foundation[i][q].cardSize.y/2>663){
+      if(move>=0&&foundation[i][q].location.y+cardSize.y/2>663){
         
         
         first = foundation[i][q].ID
         
+        if(tab[move].length>0){
         sec = tab[move][tab[move].length-1].ID
+        } else{
+          sec = 13
+        }
         
 
         
@@ -384,37 +395,85 @@ if(heldCard.length>1){
 
 
 }
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-
-  
+  if(currentIndex!=0){
   image(cardBack, 290, 360, cardSize.x, cardSize.y)
-
-
-  if(lerpF>0.5){
-  image(cardsImages[stock[current]], lerp(290,480, lerpF), 360, lerp(-cardSize.x, cardSize.x,lerpF), cardSize.y)
-  } else{
-    image(cardBack, lerp(290,480, lerpF), 360, lerp(-cardSize.x, cardSize.x,lerpF), cardSize.y)
   }
   
-  if(flip&&lerpF<1){
+  if(current.length>1){
+  current[current.length-2].show()
+  }
+  
+
+    if(current.length>0){
+    current[current.length-1].show()
+    }
+
+  
+  
+  
+  
+  
+  
+  
+    if(current[current.length-1]){
+      
+      
+  
+    if(current[current.length-1].lerpP<1){
+      current[current.length-1].lerpP+=0.1
+    } else{
+      current[current.length-1].lerpP = 1
+    }
+  
+
+
+  
+  
+  
+  move = current[current.length-1].update()
+  
+  
+  if(move>=0){
     
-    lerpF+=0.07
-  } else{
-    lerpF = 1
-    flip = false
+    tab[move].push(new card(current[current.length-1].ID, 'tab', 290+move*187, 663+(tab[move].length)*30, true, move, tab[move].length))
+    
+    tab[move][tab[move].length-1].lerpP = 0
+    tab[move][tab[move].length-1].location.x = current[current.length-1].location.x
+    tab[move][tab[move].length-1].location.y = current[current.length-1].location.y
+    
+    
+    current.pop()
+
+    
     
   }
+  
+  
+      
+    }
+  
+  
+    if(flip){
+    if(lerpF>0.5){
+    image(cardsImages[stock[currentIndex]], lerp(290, 480, lerpF), 360, lerp(cardSize.x, -cardSize.x, lerpF), cardSize.y)
+    } else{
+      image(cardBack, lerp(290, 480, lerpF), 360, lerp(cardSize.x, -cardSize.x, lerpF), cardSize.y)
+      
+      
+    }
+    if(lerpF<1){
+    lerpF+=0.05
+    } else{
+      lerpF = 1
+      current.push(new card(stock[currentIndex], 'current', 480, 360, true))
+      
+      flip = false
+    }
+  }
+
+  
+  
+
   
 
 }
@@ -424,11 +483,36 @@ function mousePressed(){
   press.x = (mouseX/(1796*windowSize))*1796
   press.y = (mouseY/(1080*windowSize))*1080
   
-  if(press.x<290+cardSize.x/2&&press.x>290-cardSize.x/2&&press.y<360+cardSize.y/2&&press.y>360-cardSize.y/2&&!flip){
+  
+  if(press.x > 290-cardSize.x/2&&press.x < 290+cardSize.x/2 && press.y > 360-cardSize.y/2&&press.y < 360+cardSize.y/2&&!flip){
+    
+    if(currentIndex!=0){
+
+    
+    currentIndex--
+    
+ 
+
     flip = true
     lerpF = 0
-    current--
+      
+    } else{
+      stock = []
+console.log(current)
+      for(let i = 0; i<current.length; i++){
+        stock.push(current[i].ID)
+      }
+      current = []
+      currentIndex = stock.length-1
+
+      console.log(stock)  
+    }
+
   }
+  
+
+  
+
 }
 
 
