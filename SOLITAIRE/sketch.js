@@ -55,7 +55,7 @@ for(let i = 28; i<52; i++){
 
 
   
-  console.log(stock[stock.length-1])
+
   
   last = 0
   
@@ -433,7 +433,9 @@ if(heldCard.length>1){
   move = current[current.length-1].update()
   
   
-  if(move>=0){
+  if(move>=0&&current[current.length-1].location.y+cardSize.y/2>663&&current[current.length-1].ID%13+1==tab[move][tab[move].length-1].ID%13+1-1){
+
+    
     
     tab[move].push(new card(current[current.length-1].ID, 'tab', 290+move*187, 663+(tab[move].length)*30, true, move, tab[move].length))
     
@@ -502,6 +504,8 @@ console.log(current)
       for(let i = 0; i<current.length; i++){
         stock.push(current[i].ID)
       }
+      
+      shuffle(stock, true)
       current = []
       currentIndex = stock.length-1
 
